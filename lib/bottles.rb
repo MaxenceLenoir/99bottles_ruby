@@ -1,6 +1,12 @@
 require 'pry'
 
 class Bottles
+  attr_reader :verse_template
+
+  def initialize(verse_template: BottleVerse)
+    @verse_template = verse_template
+  end
+
   def song
     verses(99, 0)
   end
@@ -10,13 +16,7 @@ class Bottles
   end
 
   def verse(number)
-    bottle_number = BottleNumber.for(number)
-
-    "#{bottle_number} of beer on the wall, ".capitalize +
-    "#{bottle_number} of beer.\n" +
-    "#{bottle_number.action}, " +
-    "#{bottle_number.successor} " +
-    "of beer on the wall.\n"
+    verse_template.lyrics(number)
   end
 
   def quantity(number)
@@ -132,5 +132,27 @@ class BottleNumber6 < BottleNumber
 
   def self.handles?(number)
     number == 6
+  end
+end
+
+class BottleVerse
+  attr_reader :number
+
+  def initialize(number)
+    @number = number
+  end
+
+  def self.lyrics(number)
+    new(number).lyrics
+  end
+
+  def lyrics
+    bottle_number = BottleNumber.for(number)
+
+    "#{bottle_number} of beer on the wall, ".capitalize +
+    "#{bottle_number} of beer.\n" +
+    "#{bottle_number.action}, " +
+    "#{bottle_number.successor} " +
+    "of beer on the wall.\n"
   end
 end
